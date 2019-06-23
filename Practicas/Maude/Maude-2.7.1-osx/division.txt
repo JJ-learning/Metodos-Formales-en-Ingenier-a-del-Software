@@ -1,0 +1,16 @@
+eq div(N,0) = 0 .
+eq div(0,N) = 0 .
+eq div(N,N) = s 0 .
+eq div(N,M) = (N restaDiv M) + div((N-M), M)
+
+
+
+eq 0 restaDiv M = 0.
+eq N restaDiv 0 = s 0 .
+eq N restaDiv N = s 0 .
+eq s(N) restaDiv s(sM) = N restaDiv M .
+
+
+
+/// Resto division
+eq M 0 div P = M .

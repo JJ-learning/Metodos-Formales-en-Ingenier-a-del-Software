@@ -1,0 +1,95 @@
+fmod NATURALES is
+    sort Nat .
+    op 0 : -> Nat .
+    op s_ : Nat -> Nat .
+endfm
+
+fmod ENTEROS is
+    including NATURALES .
+    sort Int .
+    subsort Nat < Int .
+    op -_ : Int -> Int .
+    
+    vars N : Int .
+
+    eq - 0 = 0 .
+    eq - - N = N .
+    eq s - s N = - N .
+endfm
+
+fmod SUMA is
+    including ENTEROS .
+
+    op _+_ : Int Int -> Int .
+    op _-_ : Int Int -> Int .
+
+    vars N M : Int .
+
+    eq 0 + N = N .
+    eq s M + N = M + s N .
+
+    eq 0 + - N = - N .
+    eq - N + 0 = - N .
+    eq - N + s M = s - N + M .
+    eq - N + - M = - (N + M) .
+endfm
+
+fmod RESTA is
+    including SUMA .
+    op _-_ : Int Int -> Int .
+
+    vars N M : Int .
+
+    eq N - 0 = N .
+    eq 0 - N = - N .
+    eq s N - s M = N - M .
+    eq s N - - M = N + s M .
+    eq - N - M = - (N + M) .
+endfm
+
+fmod MULTIPLICACION is
+    including SUMA .
+    op _*_ : Int Int -> Int .
+
+    vars N M : Int .
+
+    eq N * 0 = 0 .
+    eq 0 * N = 0 .
+
+    eq N * s 0 = N .
+    eq s 0 * N = N .
+
+    eq - N * 0 = 0 .
+    eq 0 * - N = 0 .
+
+    eq - N * s 0 = - N .
+    eq s 0 * - N = - N .
+
+    eq s N * M = M + (N * M) .
+
+    eq - s N * M = - (M + (N * M)) .
+    eq N * - s M = - (N + (M * N)) .
+endfm
+
+fmod POTENCIA is
+    including MULTIPLICACION .
+    op _**_ : Int Int -> Int .
+
+    vars N M : Int .
+
+    eq 0 ** N = 0 .
+    eq N ** 0 = s 0 .
+
+    eq 0 ** N = 0 .
+    eq N ** 0 = s 0 .
+    eq 0 ** - N = 0 .
+    eq - N ** 0 = s 0 .
+
+    eq N ** s M = N * (N ** M) .
+
+    eq - N ** s M = - N * (- N ** M) .
+    eq N ** - M = s 0 .
+endfm
+
+
+reduce in POTENCIA : s s 0 ** - s s s 0 .

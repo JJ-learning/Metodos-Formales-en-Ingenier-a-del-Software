@@ -1,0 +1,93 @@
+-------
+ESTADO
+-------
+Colección bloques sin usar
+Colección bloques usados
+Cola con los archivos/bloques borrados
+
+-----------
+INVARIANTE
+----------
+1) Si no hay espacio, todos los bloques estarán usados
+2) Un bloque está usado o sin usar
+3) Todo conjunto de bloques borrados debe pertener a los bloques usados
+4) Un bloque borrado solo puede pertenecer a un elemento de la cola de archivos borrados
+5) La colección de bloques usados no tendrá números de bloque repetidos
+5) La colección de bloques sin usar no tendrá números de bloque repetidos
+
+------------
+OPERACIONES
+------------
+
+BorrarFichero -> 
+   Precondición: 
+      Los bloques del fichero deben estar usados
+   Postcondición:
+      Los bloques del fichero borrado se guardan en la cola de archivos borrados
+      
+CrearFichero
+   Precondición:
+      Que haya bloques libres
+   Postcondición:
+      Disminuye el número de bloques libres
+      Aumenta el número de bloques usados
+      Los bloques asignados al fichero pasan a estar ocupados.
+      
+LiberarMemoria
+   Precondición:
+      Que haya ficheros borrados
+   Postcondición:
+      Se libera el primer conjunto de bloques
+      El conjunto de bloques liberado pasa a estar libre
+   
+
+
+
+
+-------
+ESTADO
+-------
+B_LIBRES: Conjunto potencia(BLOQUES)
+B_USADOS: Conjunto potencia(BLOQUES)
+A_BORRADOS: Conjunto potencia(<BLOQUES>)  -> Tienen que estar ordenados
+
+-----------
+INVARIANTE
+----------
+1) B_LIBRES = 0 => B_USADOS = BLOQUES  ==
+  ==  B_LIBRES INTERSECCIÓN B_USADOS = 0
+2) B_LIBRES U B_USADOS = BLOQUES
+3) PARA TODO i € dom A_BORRADOS | A_BORRADOS(i) € B_USADOS
+4) PARA TODO i,j € dom A_BORRADOS | i != j | A_BORRADOS(i) INTERSECCIÓN A_BORRADOS(j) = 0
+5) ídem
+6) Por la definición de la propiedad de los conjuntos, no puede haber valores repetidos.
+
+------------
+OPERACIONES
+------------
+BorrarFichero -> BLOQUES_B
+    Precondición:
+        BLOQUES_B c= B_USADOS
+        PARA TODO i € BLOQUES_B i € B_USADOS
+    Postcondición:
+        A_BORRADOS' = A_BORRADOS ^ <BLOQUES_B>
+
+CrearFichero -> BLOQUES_F
+    Precondición:
+        B_LIBRES != 0 & 
+        BLOQUES_F c= B_LIBRES
+    Postcondición:
+        B_LIBRES' = B_LIBRES \ BLOQUES_F &
+        B_USADOS' = B_USADOS U BLOQUES_F
+
+LiberarMemoria -> 
+    Precondición:
+        A_BORRADOS != 0 || # A_BORRADOS > 0                     # -> Cardinalidad
+    Postcondición:
+        B_LIBRES' = B_LIBRES U top(A_BORRADOS) &                top se pone para coger el primer elemento de la lista
+        B_USADOS' = B_USADOS \ top(A_BORRADOS)
+        A_BORRADOS' = cola(A_BORRADOS)                          cola nos devuelve el resto de la lista menos la cabeza(top)
+
+
+
+

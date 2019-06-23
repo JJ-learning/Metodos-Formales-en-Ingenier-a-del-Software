@@ -1,0 +1,44 @@
+fmod NATURALES is
+    sort Nat .
+    op 0 : -> Nat .
+    op s_ : Nat -> Nat .
+endfm
+
+fmod LISTA is
+    including NATURALES .
+    sort List .
+    op nill : -> List .
+    op __ : List Nat -> List .
+    op append : List Nat -> List .
+    op length : List -> Nat .
+    op pop : List -> Nat .
+    op popback : List -> Nat .
+    op auxreverse : List -> List .
+    op reverse : List -> List .
+
+    vars N M : Nat .
+    vars L P : List .
+
+    eq length(nill) = 0 .
+    eq length(L N) = s length(L) .
+
+    eq append(nill,0) = nill 0 .
+    eq append(L,N) = L N .
+    
+    eq pop(nill) = 0 .
+    eq pop(nill N) = N .
+    eq pop(L N M) = pop(L N) .
+
+    eq popback(nill) = 0 .
+    eq popback(nill N) = N .
+    eq popback(L N M) = popback(L M) .
+
+    eq auxreverse(nill) = nill .
+    eq auxreverse(nill N) = nill .
+    eq auxreverse(L N) = auxreverse(L) N .
+
+    eq reverse(nill) = nill .
+    eq reverse(L) = reverse(auxreverse(L)) pop(L) .
+endfm
+
+reduce in LISTA : append(append(nill,s 0),0) . 

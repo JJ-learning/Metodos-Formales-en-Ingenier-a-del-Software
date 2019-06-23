@@ -1,0 +1,247 @@
+fmod SUMA is
+    sort Nat .
+    op 0 : -> Nat .
+    op s_ : Nat -> Nat .
+    op _+_ : Nat Nat -> Nat .
+
+    vars M N : Nat .
+
+    eq 0 + M = M .
+    eq s_(M) + N = M + s_(N) .
+endfm
+
+fmod RESTA is
+    including SUMA .
+    op _-_ : Nat Nat -> Nat .
+
+    vars M N : Nat .
+
+    eq M - 0 = M .
+    eq 0 - M = 0 .
+    eq s_(M) - s_(N) = M - N .
+endfm
+
+fmod DIFERENCIA is
+    sort Nat .
+    op 0 : -> Nat .
+    op s_ : Nat -> Nat .
+    op _dif_ : Nat Nat -> Nat .
+
+    vars M N : Nat .
+
+    eq M dif 0 = M .
+    eq 0 dif N = N .
+    eq s_(M) dif s_(N) = M dif N . 
+endfm
+
+fmod MINUSFIVE is
+    sort Nat .
+    op 0 : -> Nat .
+    op s_ : Nat -> Nat .
+    op minusfive_ : Nat -> Nat .
+
+    vars M N : Nat .
+
+    eq minusfive 0 = 0 .
+    eq minusfive s_(0) = 0 .
+    eq minusfive s_(s_(0)) = 0 .
+    eq minusfive s_(s_(s_(0))) = 0 .
+    eq minusfive s_(s_(s_(s_(0)))) = 0 .
+    eq minusfive s_(s_(s_(s_(s_(M))))) = M .  
+endfm
+
+fmod NPAR is
+    sort Nat .
+    op 0 : -> Nat .
+    op s_ : Nat -> Nat .
+    op par_ : Nat -> Nat .
+    op _+_ : Nat Nat -> Nat .
+
+    vars N M : Nat .
+
+    eq 0 + N = N .
+    eq s N + M = N + s M .
+
+    eq par 0 = 0 .
+    eq par s 0 = s s 0 .
+    eq par s N = s s 0 + par N .
+endfm
+
+fmod IMPAR is
+    sort Nat .
+    op 0 : -> Nat .
+    op s_ : Nat -> Nat .
+    op impar_ : Nat -> Nat .
+    op _+_ : Nat Nat -> Nat .
+
+    vars N M : Nat .
+
+    eq 0 + N = N .
+    eq s N + M = N + s M .
+
+    eq impar 0 = 0 .
+    eq impar s 0 = s 0 .
+    eq impar s N = s s 0 + impar N .
+endfm
+
+fmod FIBONACCI is
+    sort Nat .
+    op 0 : -> Nat .
+    op s_ : Nat -> Nat .
+    op fibo_ : Nat -> Nat .
+    op _+_ : Nat Nat -> Nat .
+
+    vars N M : Nat .
+
+    eq 0 + N = N .
+    eq s N + M = N + s M .
+
+    eq fibo 0 = 0 .
+    eq fibo s 0 = s 0 .
+    eq fibo s s 0 = s 0 .
+    eq fibo s s N = fibo N + fibo s N .
+endfm
+
+fmod TRIANGULO is
+    sort Nat .
+    op 0 : -> Nat .
+    op s_ : Nat -> Nat .
+    op tri_ : Nat -> Nat .
+    op _+_ : Nat Nat -> Nat .
+
+    vars N M : Nat .
+
+    eq 0 + N = N .
+    eq s N + M = N + s M .
+
+    eq tri 0 = 0 .
+    eq tri s 0 = s 0 .
+    eq tri s s 0 = s s 0 + tri s 0 .
+    eq tri s N = s N + tri N .
+endfm
+
+fmod PARIMPAR is
+    sort Nat .
+    op 0 : -> Nat .
+    op s_ : Nat -> Nat .
+    op parimpar_ : Nat -> Nat .
+
+    vars N : Nat .
+
+    eq parimpar 0 = 0 .
+    eq parimpar s 0 = s 0 .
+
+    eq parimpar s s N = parimpar N .
+endfm
+
+fmod SUMAPAR is 
+    including NPAR .
+
+    op sumapar_ : Nat -> Nat .
+
+    vars N : Nat .
+
+    eq sumapar s 0 = 0 .
+    eq sumapar s s 0 = s s 0 .
+    eq sumapar s N = par N + sumapar N .
+endfm
+
+fmod COCIENTE is
+    including SUMA .
+    including RESTA .
+
+    op _div_ : Nat Nat -> Nat .
+    op _resta_ : Nat Nat -> Nat .
+
+    vars N M : Nat .
+
+    eq 0 resta N = 0 .
+    eq N resta 0 = s 0 .
+    eq N resta N = s 0 .
+    eq s N resta s M = N resta M .
+
+    eq N div 0 = 0 .
+    eq 0 div N = 0 .
+    eq N div N = s 0 .
+    eq N div M = (N resta M) + ((N - M) div M) .
+endfm
+
+fmod RESTO is 
+    including RESTA .
+    
+    op __div_ : Nat Nat Nat -> Nat .
+    op _restadiv_ : Nat Nat -> Nat .
+
+    vars N M P : Nat .
+
+    eq M 0 div P = M .
+    eq M N div 0 = 0 .
+    eq M N div P = N (N - P) div P .
+
+    eq M restadiv M = 0 .
+    eq M restadiv N = M M div N .
+endfm
+
+fmod MULTIPLICACION is
+    including SUMA .
+    op _*_ : Nat Nat -> Nat .
+
+    vars N M : Nat .
+
+    eq N * 0 = 0 .
+    eq 0 * N = 0 .
+
+    eq N * s 0 = N .
+    eq s 0 * N = N .
+
+    eq s N * M = M + (N * M) .
+endfm
+
+fmod POTENCIA is
+    including MULTIPLICACION .
+    op _**_ : Nat Nat -> Nat .
+
+    vars N M : Nat .
+
+    eq 0 ** N = 0 .
+    eq N ** 0 = s 0 .
+
+    eq N ** s M = N * (N ** M) .
+endfm
+
+fmod FACTORIAL is 
+    including MULTIPLICACION . 
+    op fac_ : Nat -> Nat .
+
+    vars N  : Nat .
+
+    eq fac 0 = 0 .
+    eq fac s 0 = s 0 .
+
+    eq fac s N = s N * fac N .
+endfm
+
+fmod CUBICO is 
+    including POTENCIA .
+    op cub_ : Nat -> Nat .
+
+    vars N : Nat .
+
+    eq cub 0 = 0 .
+    eq cub s 0 = s 0 .
+    eq cub N = N ** s s s 0 .
+endfm
+
+fmod CUBICO2 is 
+    including CUBICO .
+    op cub2_ : Nat -> Nat .
+
+    vars N : Nat .
+
+    eq cub2 0 = 0 .
+    eq cub2 s 0 = s 0 .
+
+    eq cub2 s N = cub s N + cub2 N .
+endfm
+
+reduce in COCIENTE : s s 0 div s s 0 .

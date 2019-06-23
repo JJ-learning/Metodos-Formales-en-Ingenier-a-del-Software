@@ -1,0 +1,276 @@
+fmod NATURALES is
+    sort Nat .
+    op 0 : -> Nat .
+    op s_ : Nat -> Nat .
+endfm
+
+fmod SUMA is
+    including NATURALES .
+    op _+_ : Nat Nat -> Nat .
+
+    vars M N : Nat .
+
+    eq 0 + M = M .
+    eq s_(M) + N = M + s_(N) .
+endfm
+
+fmod RESTA is
+    including SUMA .
+    op _-_ : Nat Nat -> Nat .
+
+    vars M N : Nat .
+
+    eq M - 0 = M .
+    eq 0 - M = 0 .
+    eq s_(M) - s_(N) = M - N .
+endfm
+
+fmod SIMPLE-BOOL is
+    sort Boolean .
+    including RESTA .
+
+    op TRUE : -> Boolean .
+    op FALSE : -> Boolean .
+
+endfm
+
+fmod TOBOOL is 
+    including SIMPLE-BOOL .
+    op tobool_ : Nat -> Boolean .
+
+    vars N : Nat .
+
+    eq tobool 0 = FALSE .
+    eq tobool N = TRUE .
+endfm
+
+fmod OPERADORES is
+    including TOBOOL .
+    op not_ : Boolean -> Boolean .
+    op _or_ : Boolean Boolean -> Boolean .
+    op _and_ : Boolean Boolean -> Boolean .
+    op _xor_ : Boolean Boolean -> Boolean .
+    op _nor_ : Boolean Boolean -> Boolean .
+    op _nand_ : Boolean Boolean -> Boolean .
+
+    eq not TRUE = FALSE .
+    eq not FALSE = TRUE .
+
+    eq TRUE or TRUE = TRUE .
+    eq TRUE or FALSE = TRUE .
+    eq FALSE or TRUE = TRUE .
+    eq FALSE or FALSE = FALSE .
+
+    eq TRUE and TRUE = TRUE .
+    eq TRUE and FALSE = FALSE .
+    eq FALSE and TRUE = FALSE .
+    eq FALSE and FALSE = FALSE .
+
+    eq TRUE xor TRUE = TRUE .
+    eq TRUE xor FALSE = FALSE .
+    eq FALSE xor TRUE = FALSE .
+    eq FALSE xor FALSE = TRUE .
+
+    eq TRUE nor TRUE = FALSE .
+    eq TRUE nor FALSE = FALSE .
+    eq FALSE nor TRUE = FALSE .
+    eq FALSE nor FALSE = TRUE .
+
+    eq TRUE nand TRUE = FALSE .
+    eq TRUE nand FALSE = TRUE .
+    eq FALSE nand TRUE = TRUE .
+    eq FALSE nand FALSE = TRUE .
+endfm
+
+fmod COMPARACIONES is 
+    including OPERADORES .
+    op _<_ : Nat Nat -> Boolean .
+    op _<=_ : Nat Nat -> Boolean .
+    op _>_ : Nat Nat -> Boolean .
+    op _>=_ : Nat Nat -> Boolean .
+    op _===_ : Nat Nat -> Boolean .
+    op _!=_ : Nat Nat -> Boolean .
+    op max__ : Nat Nat -> Nat .
+    op min__ : Nat Nat -> Nat .
+    op max3___ : Nat Nat Nat -> Nat .
+    op min3___ : Nat Nat Nat -> Nat .
+    op if_then_else_ : Boolean Nat Nat -> Nat .
+    op if_then_else_ : Boolean Boolean Boolean -> Boolean .
+    
+
+    vars N M O : Nat .
+    vars P Q : Boolean .
+
+    eq 0 < s N = TRUE .
+    eq N < 0 = FALSE .
+    eq s N < s M = N < M .
+
+    eq 0 <= 0 = TRUE .
+    eq 0 <= s N = TRUE .
+    eq s N <= 0 = FALSE .
+    eq s N <= s M = N <= M .
+
+    eq 0 > s N = FALSE .
+    eq N > 0 = TRUE .
+    eq s N > s M = N > M .
+
+    eq 0 >= 0 = TRUE .
+    eq s N >= 0 = TRUE .
+    eq 0 >= s N = FALSE .
+    eq s N >= s M = N >= M .
+    
+    eq s N === 0 = FALSE .
+    eq 0 === s N = FALSE .
+    eq 0 === 0 = TRUE .
+    eq s N === s M = N === M .
+
+    eq s N != 0 = TRUE .
+    eq 0 != s N = TRUE .
+    eq 0 != 0 = FALSE .
+    eq s N != s M = N != M .
+
+    eq max N M = (N - M) + M .
+
+    eq min N M = (N + M) - max N M .
+
+    eq max3 N M O = max max N M max M O .
+
+    eq min3 N M O = min min N M min M O .
+
+    eq if TRUE then N else M = N .
+    eq if FALSE then N else M = M .
+
+    eq if TRUE then P else Q = P .
+    eq if FALSE then P else Q = Q .
+endfm
+
+fmod PAR is 
+    including COMPARACIONES .
+    op par_ : Nat -> Boolean .
+
+    vars N : Nat .
+
+    eq par 0 = TRUE .
+    eq par s 0 = FALSE .
+    eq par s s N = par N .
+endfm
+
+fmod IMPAR-BOOL is 
+    including COMPARACIONES .
+    op impar_ : Nat -> Boolean .
+
+    vars N : Nat .
+
+    eq impar 0 = FALSE .
+    eq impar s 0 = TRUE .
+    eq impar s s N = impar N .
+endfm
+
+fmod FIBONACCI is
+    including COMPARACIONES .
+    op fibo_ : Nat -> Nat .
+
+    vars N M : Nat .
+
+    eq fibo 0 = 0 .
+    eq fibo s 0 = s 0 .
+    eq fibo s s 0 = s 0 .
+    eq fibo s s N = fibo N + fibo s N .
+endfm
+
+fmod ISFIB is
+    including FIBONACCI .
+    op aux___ : Nat Nat Nat -> Boolean .
+    op isFibo_ : Nat -> Boolean .
+
+    var N M P : Nat .
+
+    eq aux N s(s(N)) P = FALSE .
+    eq aux N M P = if (N === P) then TRUE else (aux N (s(M)) (fibo (s(M)))) .
+    eq isFibo N = aux N 0 (fibo 0) .
+endfm
+
+fmod MULTIPLICACION is
+    including COMPARACIONES .
+    op _*_ : Nat Nat -> Nat .
+
+    vars N M : Nat .
+
+    eq N * 0 = 0 .
+    eq 0 * N = 0 .
+
+    eq N * s 0 = N .
+    eq s 0 * N = N .
+
+    eq s N * M = M + (N * M) .
+endfm
+
+fmod COCIENTE is
+    including MULTIPLICACION .
+
+    op _div_ : Nat Nat -> Nat .
+    op _resta_ : Nat Nat -> Nat .
+
+    vars N M : Nat .
+
+    eq 0 resta N = 0 .
+    eq N resta 0 = s 0 .
+    eq N resta N = s 0 .
+    eq s N resta s M = N resta M .
+
+    eq N div 0 = 0 .
+    eq 0 div N = 0 .
+    eq N div N = s 0 .
+    eq N div M = (N resta M) + ((N - M) div M) .
+endfm
+
+fmod RESTO is 
+    including COCIENTE .
+    
+    op __div_ : Nat Nat Nat -> Nat .
+    op _restadiv_ : Nat Nat -> Nat .
+
+    vars N M P : Nat .
+
+    eq M 0 div P = M .
+    eq M N div 0 = 0 .
+    eq M N div P = N (N - P) div P .
+
+    eq M restadiv M = 0 .
+    eq M restadiv N = M M div N .
+endfm
+
+fmod DIVISIBLE is
+    including RESTO .
+
+    op _divisible_ : Nat Nat -> Boolean .
+
+    vars N M P : Nat .
+
+    eq N divisible M = if (N div M) * M === N  then TRUE else FALSE .
+endfm
+
+fmod ISPRIMO is
+    including DIVISIBLE .
+    op isprim_ : Nat -> Boolean .
+    op aux__ : Nat Nat -> Boolean .
+    op _====_ : Boolean Boolean -> Boolean .
+
+    var N M : Nat .
+
+    eq TRUE ==== FALSE = FALSE .
+    eq FALSE ==== TRUE = FALSE .
+    eq TRUE ==== TRUE = TRUE .
+    eq FALSE ==== FALSE = TRUE .
+
+    eq aux N s 0 = TRUE .
+    eq aux N N = TRUE .
+    eq aux s s 0 s s 0 = TRUE .
+
+    eq aux N M = if ((N div M) * M === N) ==== TRUE then FALSE else aux N s M .
+
+    eq isprim N = aux N s(s(0)) .
+endfm
+
+reduce in ISPRIMO : isprim s s s s s s s s s 0 .
+
